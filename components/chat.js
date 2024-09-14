@@ -13,7 +13,7 @@ export default function Chat() {
 
     const DEFAULT_TOPIC = "New Conversation";
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [session, setSession] = useState({
         id: "",
@@ -27,8 +27,6 @@ export default function Chat() {
 
     const inputRef = useRef();
       const { shouldSubmit } = useSubmitHandler();
-
-      const isStreaming = messages.some((m) => m.streaming);
     
       const onInput = (text) => {
         setUserInput(text);
@@ -58,9 +56,8 @@ export default function Chat() {
 
       const onSubmit = (userInput) => {
         if (userInput.trim() === "") return;    
-        if (isStreaming) return;
-    
-        // TODO: send to backend
+        if (loading) return;
+
         setMessages([
             ...messages,
             {
@@ -69,9 +66,56 @@ export default function Chat() {
                 date: new Date(),
             },
         ])
+
+        sendMessage(userInput);
+
         setUserInput("");
         console.log(messages)
       };
+
+    function sendMessage(message) {
+      console.log("Sending message: ", message);
+        setLoading(true);
+        let loadingMessage = ""
+        
+          const es = new EventSource("http://127.0.0.1:5000/response");
+          es.onmessage = (e) => {
+            console.log(e.data);
+            if (e.data == "Message 4") {
+              console.log("Closing connection");
+              es.close();
+              setLoading(false);
+            }
+
+            else {
+              loadingMessage += e.data;
+                setMessages((prev) => {
+                  if (prev.length > 0 && prev[prev.length - 1].role === "system") {
+                    return [
+                      ...prev.slice(0, prev.length - 1),
+                      {
+                        role: "system",
+                        content: loadingMessage,
+                        date: new Date(),
+                        streaming: true,
+                      },
+                    ];
+                  } else {
+                    return [
+                      ...prev,
+                      {
+                        role: "system",
+                        content: loadingMessage,
+                        date: new Date(),
+                        streaming: true,
+                      },
+                    ];
+                  }
+                });
+            }
+          };
+
+    }
 
     return (
         <div className={`${styles["chat"]}`} 
@@ -104,13 +148,6 @@ export default function Chat() {
                     }
                   >
                     <div className={styles["chat-message-container"]}>
-                        {message.role === "system" && (
-                            <div
-                              className={`${styles["chat-message-role-name"]} ${styles["no-hide"]}`}
-                            >
-                                {message.role}
-                            </div>
-                          )}
                       <div className={styles["chat-message-item"]}>
                         {message.role === "system" && (
                             <Markdown
@@ -124,7 +161,9 @@ export default function Chat() {
                           />
                         )}
                         {message.role === "user" && (
-                            <div>
+                            <div
+                              fontSize={16}
+                            >
                                 {message.content}
                             </div>
                         )}
@@ -175,23 +214,13 @@ export default function Chat() {
                   fontSize: '1rem',
                 }}
               />
-              {isStreaming ? (
-                <IconButton
-                  icon={<StopIcon />}
-                  text={"Stop"}
-                  className={styles["chat-input-send"]}
-                  type="primary"
-                  onClick={() => onUserStop()}
-                />
-              ) : (
-                <IconButton
+              <IconButton
                   icon={<SendWhiteIcon />}
                   text={"Send"}
                   className={styles["chat-input-send"]}
                   type="primary"
                   onClick={() => onSubmit(userInput)}
                 />
-              )}
             </label>
           </div>
         </div>
