@@ -1,3 +1,5 @@
+import styles from "./ui-lib.module.scss";
+
 export function showImageModal(img) {
     showModal({
       title: Locale.Export.Image.Modal,

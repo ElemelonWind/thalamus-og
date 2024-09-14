@@ -7,65 +7,28 @@ import SendWhiteIcon from "../icons/send-white.js";
 import StopIcon from "../icons/pause.js";
 import dynamic from "next/dynamic";
 import styles from "./chat.module.scss";
+import ScrollContainer from "./ScrollContainer.js";
 
 export default function Chat() {
 
     const DEFAULT_TOPIC = "New Conversation";
-    const CHAT_PAGE_SIZE = 15;
-    const MAX_RENDER_MSG_COUNT = 45;
+
+    const [loading, setLoading] = useState(true);
 
     const [session, setSession] = useState({
         id: "",
         topic: "",
-        messages: [],
     });
 
+    const [messages, setMessages] = useState([]);
+
     const [userInput, setUserInput] = useState("");
-    const [hitBottom, setHitBottom] = useState(true);
     const [inputRows, setInputRows] = useState(2);
 
-    const scrollRef = useRef();
     const inputRef = useRef();
-
-    const isScrolledToBottom = scrollRef?.current
-    ? Math.abs(
-        scrollRef.current.scrollHeight -
-          (scrollRef.current.scrollTop + scrollRef.current.clientHeight),
-      ) <= 1
-    : false;
-
-    const { setAutoScroll, scrollDomToBottom } = useScrollToBottom(
-        scrollRef,
-        isScrolledToBottom,
-      );
       const { shouldSubmit } = useSubmitHandler();
 
-    const renderMessages = useMemo(() => {
-        return session.messages.filter((m) => !m.hidden);
-      }, [
-        session.messages,
-        session.messages.length,
-        userInput,
-      ]);
-
-    const [msgRenderIndex, _setMsgRenderIndex] = useState(
-        Math.max(0, renderMessages.length - CHAT_PAGE_SIZE),
-      );
-      function setMsgRenderIndex(newIndex) {
-        newIndex = Math.min(renderMessages.length - CHAT_PAGE_SIZE, newIndex);
-        newIndex = Math.max(0, newIndex);
-        _setMsgRenderIndex(newIndex);
-      }
-
-      const messages = useMemo(() => {
-        const endRenderIndex = Math.min(
-          msgRenderIndex + 3 * CHAT_PAGE_SIZE,
-          renderMessages.length,
-        );
-        return renderMessages.slice(msgRenderIndex, endRenderIndex);
-      }, [msgRenderIndex, renderMessages]);
-
-      const isStreaming = session.messages.some((m) => m.streaming);
+      const isStreaming = messages.some((m) => m.streaming);
     
       const onInput = (text) => {
         setUserInput(text);
@@ -75,11 +38,6 @@ export default function Chat() {
     const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
         loading: () => <LoadingIcon />,
     });
-
-    function scrollToBottom() {
-        setMsgRenderIndex(renderMessages.length - CHAT_PAGE_SIZE);
-        scrollDomToBottom();
-      }
 
     const onInputKeyDown = (e) => {
         // if ArrowUp and no userInput, fill with last input
@@ -103,23 +61,21 @@ export default function Chat() {
         if (isStreaming) return;
     
         // TODO: send to backend
-        setSession((prev) => {
-            const newSession = { ...prev };
-            const newMessage = {
+        setMessages([
+            ...messages,
+            {
                 role: "user",
                 content: userInput,
                 date: new Date(),
-            };
-            newSession.messages.push(newMessage);
-            return newSession;
-            }
-        );
+            },
+        ])
         setUserInput("");
-        setAutoScroll(true);
+        console.log(messages)
       };
 
     return (
-        <div className={styles.chat} key={session.id}>
+        <div className={`${styles["chat"]}`} 
+        key={session.id}>
           <div className="window-header">
             <div className={`window-header-title ${styles["chat-body-title"]}`}>
               <div
@@ -135,20 +91,10 @@ export default function Chat() {
     
           <div
             className={styles["chat-body"]}
-            ref={scrollRef}
-            onScroll={(e) => onChatBodyScroll(e.currentTarget)}
-            onMouseDown={() => inputRef.current?.blur()}
-            onTouchStart={() => {
-              inputRef.current?.blur();
-              setAutoScroll(false);
-            }}
           >
+            <ScrollContainer >
             {messages.map((message, i) => {
               const isUser = message.role === "user";
-              const showActions =
-                i > 0 &&
-                !(message.preview || message.content.length === 0)
-              const showTyping = message.preview || message.streaming;
         
               return (
                 <Fragment key={`${i}/${message.id}`}>
@@ -158,41 +104,30 @@ export default function Chat() {
                     }
                   >
                     <div className={styles["chat-message-container"]}>
-                      <div className={styles["chat-message-header"]}>
-                        <div className={styles["chat-message-role-name-container"]}>
-                          {message.role === "system" && (
+                        {message.role === "system" && (
                             <div
                               className={`${styles["chat-message-role-name"]} ${styles["no-hide"]}`}
                             >
                                 {message.role}
                             </div>
                           )}
-                          {message.role === "assistant" && (
-                            <div className={styles["chat-message-role-name"]}>
-                              {models.find((m) => m.name === message.model)
-                                ? models.find((m) => m.name === message.model)?.display_name
-                                : message.model}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      {showTyping && (
-                        <div className={styles["chat-message-status"]}>
-                          Typing...
-                        </div>
-                      )}
                       <div className={styles["chat-message-item"]}>
-                        <Markdown
-                          content={message.content}
-                          loading={
-                            (message.preview || message.streaming) &&
-                            message.content.length === 0 &&
-                            !isUser
-                          }
-                          fontSize={16}
-                          parentRef={scrollRef}
-                          defaultShow={i >= messages.length - 6}
-                        />
+                        {message.role === "system" && (
+                            <Markdown
+                            content={message.content}
+                            loading={
+                              (message.preview || message.streaming) &&
+                              message.content.length === 0 &&
+                              !isUser
+                            }
+                            fontSize={16}
+                          />
+                        )}
+                        {message.role === "user" && (
+                            <div>
+                                {message.content}
+                            </div>
+                        )}
                       </div>
                       <div className={styles["chat-message-action-date"]}>
                         {message.role === "assistant" && message.usage && (
@@ -218,9 +153,9 @@ export default function Chat() {
                 </Fragment>
               );
             })}
+            </ScrollContainer>
           </div>
           <div className={styles["chat-input-panel"]}>
-            <ScrollDownToast onclick={scrollToBottom} show={!hitBottom} />
     
             <label
               className={`${styles["chat-input-panel-inner"]}`}
@@ -234,8 +169,6 @@ export default function Chat() {
                 onInput={(e) => onInput(e.currentTarget.value)}
                 value={userInput}
                 onKeyDown={onInputKeyDown}
-                onFocus={scrollToBottom}
-                onClick={scrollToBottom}
                 rows={inputRows}
                 autoFocus={true}
                 style={{
@@ -277,38 +210,6 @@ export default function Chat() {
         </div>
       </div>
     );
-  }
-
-  function useScrollToBottom(
-    scrollRef,
-    detach = false,
-  ) {
-    // for auto-scroll
-  
-    const [autoScroll, setAutoScroll] = useState(true);
-    function scrollDomToBottom() {
-      const dom = scrollRef.current;
-      if (dom) {
-        requestAnimationFrame(() => {
-          setAutoScroll(true);
-          dom.scrollTo(0, dom.scrollHeight);
-        });
-      }
-    }
-  
-    // auto scroll
-    useEffect(() => {
-      if (autoScroll && !detach) {
-        scrollDomToBottom();
-      }
-    });
-  
-    return {
-      scrollRef,
-      autoScroll,
-      setAutoScroll,
-      scrollDomToBottom,
-    };
   }
 
   function useSubmitHandler() {
