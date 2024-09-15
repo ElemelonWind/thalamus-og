@@ -1,6 +1,5 @@
 
-  
-  .panel {
+.panel {
     height: 270px;
     width: 190px;
     position: relative;
@@ -148,4 +147,35 @@
   
   .fa-plane {
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 1500px) {
+    .panel {
+      height: 200px;
+      width: 150px;
+    }
+  
+    .ring2 {
+      font-size: 150px;
+    }
+  
+    .card2 {
+      height: 150px;
+      width: 150px;
+    }
+  
+    .ring2:before,
+    .ring2:after {
+      padding: 100px 75px;
+    }
+  
+    .border,
+    .slide {
+      height: 150px;
+      width: 150px;
+    }
+  
+    .slide {
+      bottom: -200px;
+    }
   }

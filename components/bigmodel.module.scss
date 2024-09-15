@@ -149,3 +149,36 @@
   .fa-plane {
     font-size: 28px;
   }
+
+  @media screen and (max-width: 1200px) {
+    .panel {
+      height: 200px;
+      width: 150px;
+    }
+    .ring2 {
+      font-size: 200px;
+    }
+    .card2 {
+      height: 200px;
+      width: 200px;
+    }
+    .border {
+      height: 200px;
+      width: 200px;
+    }
+    .slide {
+      height: 200px;
+      width: 200px;
+    }
+    .title {
+      font-size: 16px;
+    }
+    .para {
+      font-size: 14px;
+    }
+
+    .ring2:before,
+    .ring2:after {
+      padding: 125px 80px;
+    }
+  }

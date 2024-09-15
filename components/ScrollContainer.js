@@ -56,6 +56,7 @@ export default function ScrollContainer({children}) {
             overflowY: "auto",
             height: "100%",
             display: "flex",
+            width: "100%",
             flexDirection: "column-reverse"
           }}
         >

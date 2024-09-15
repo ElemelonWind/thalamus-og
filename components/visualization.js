@@ -7,7 +7,9 @@ export default function Visualization(props) {
     return (        <div className="h-full flex flex-1 items-center justify-center">
 
     {props.models.length === 0 && (
-            <LoadingIcon />
+            <div className="flex flex-1 items-center justify-center mb-20">
+                No visualization yet!
+            </div>
     )}
         {props.models.length !== 0 && (
             props.easy ? (

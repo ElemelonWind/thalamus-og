@@ -20,8 +20,8 @@ export default function Home() {
 
   const [showModal, setShowModal] = useState(false);
   return (<>
-    <div class={`${styles["header"]} w-screen min-h-screen flex flex-col justify-between bg-[#ede9e6]`}>
-    <div class="flex flex-col justify-center h-full py-12">
+    <div class={`${styles["header"]} w-screen h-screen bg-[#ede9e6] overflow-y-auto`}>
+    <div class="flex flex-col justify-center py-12">
         <div class="self-center items-center flex flex-col sm:flex-row w-full md:w-5/6 px-4 sm:px-0">
             <div class="w-full text-center sm:text-left sm:w-1/3 py-12 sm:px-8">
                 <h1 class="tracking-wide text-[#5a6087] text-2xl mb-6 font-bold">introducing</h1>
@@ -44,7 +44,7 @@ export default function Home() {
             </div>
         </div>
     </div>
-    <div class="flex flex-row w-full justify-center pb-12">
+    <div class="absolute bottom-20 w-full flex items-center justify-center">
         <button class="px-10 py-2 text-gray-200 bg-[#5a6087] rounded-full shadow-md text-lg hover:bg-gray-800 hover:border-red"
           onClick={() => {
               setShowModal(true);
