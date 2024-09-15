@@ -11,7 +11,11 @@ import ScrollContainer from "./ScrollContainer.js";
 import Model from "./model.js";
 import Card from "./card.js";
 import Visualization from "./visualization.js";
+import { useRouter } from "next/router";
+
 export default function Chat() {
+    const router = useRouter();
+    const performance = router.query.option == "performance";
 
     const DEFAULT_TOPIC = "Conversation";
 
@@ -161,7 +165,7 @@ export default function Chat() {
     return (
       <div className="flex">
       <div className={`${styles["sidebar"]}`}>
-      <div className={`h-full`}>
+      <div className={`h-full m-8 border-2 border-[#5a6087] rounded-lg p-4`}>
       <div className="window-header">
             <div className={`window-header-title ${styles["chat-body-title"]}`}>
               <div
@@ -192,6 +196,7 @@ export default function Chat() {
         <div className={`grid grid-cols-subgrid col-span-2`} >
         <div className={`${styles["chat"]}`}
         key={session.id}>
+          {/* <div className={`h-screen m-8 border-2 border-[#5a6087] rounded-lg p-4`}> */}
           <div className="window-header">
             <div className={`window-header-title ${styles["chat-body-title"]}`}>
               <div
@@ -209,7 +214,8 @@ export default function Chat() {
             className={styles["chat-body"]}
           >
             <ScrollContainer >
-            {messages.map((message, i) => {
+            {messages.toReversed().map((message, i) => {
+              console.log(message);
               const isUser = message.role === "user";
         
               return (
@@ -277,6 +283,7 @@ export default function Chat() {
         </div>
         </div>
         </div>
+        // </div>
       );
 }
 

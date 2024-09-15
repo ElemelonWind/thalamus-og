@@ -1,5 +1,9 @@
 import Image from "next/image";
 import localFont from "next/font/local";
+import styles from "../styles/homepage.module.scss"
+import FriendsIcon from "@/icons/friends";
+
+import { useState } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -13,103 +17,63 @@ const geistMono = localFont({
 });
 
 export default function Home() {
-  return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [showModal, setShowModal] = useState(false);
+  return (<>
+    <div class={`${styles["header"]} w-screen min-h-screen flex flex-col justify-between bg-[#ede9e6]`}>
+    <div class="flex flex-col justify-center h-full py-12">
+        <div class="self-center items-center flex flex-col sm:flex-row w-full md:w-5/6 px-4 sm:px-0">
+            <div class="w-full text-center sm:text-left sm:w-1/3 py-12 sm:px-8">
+                <h1 class="tracking-wide text-[#5a6087] text-2xl mb-6 font-bold">introducing</h1>
+                <h2 class="font-bold tracking-widest text-4xl">THALAMUS</h2>
+                <span class={`${styles["content__container"]} block font-light text-browngray text-2xl my-6`}>
+                    <ul class={`${styles["content__container__list"]}`}>
+                        <li class={`${styles["content__container__list__item"]}`}>Mixtral</li>
+                        <li class={`${styles["content__container__list__item"]}`}>Dolphin</li>
+                        <li class={`${styles["content__container__list__item"]}`}>LLAMA Default</li>
+                        <li class={`${styles["content__container__list__item"]}`}>GPT-4o</li>
+                        <li class={`${styles["content__container__list__item"]}`}>Claude 3.5 Sonnet</li>
+                        <li class={`${styles["content__container__list__item"]}`}>Gemini 1.5 Pro</li>
+                        <li class={`${styles["content__container__list__item"]}`}>Custom Agents</li>
+                    </ul>
+                </span>
+                <p class="font-bold tracking-widest text-4xl">harnessed by one router</p>
+            </div>
+            <div class="w-full sm:w-2/3">
+                <FriendsIcon />
+            </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
+    <div class="flex flex-row w-full justify-center pb-12">
+        <button class="px-10 py-2 text-gray-200 bg-[#5a6087] rounded-full shadow-md text-lg hover:bg-gray-800 hover:border-red"
+          onClick={() => {
+              setShowModal(true);
+            }
+          }
+        >Get Started</button>
+    </div>
+</div>
+    {showModal && (
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center" 
+      onClick={() => {
+        setShowModal(false);
+      }}
+    >
+        <div class="bg-white p-12 rounded-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Get Started</h2>
+            <p class="text-gray-600 mb-10">What would you like to prioritize?</p>
+            <button className="bg-[#5a6087] text-gray-200 px-4 py-2 mr-8 rounded-full shadow-md text-lg hover:bg-gray-800 hover:border-red"
+              onClick={() => {
+                window.location.replace("/chat?option=performance");
+              }}
+            >Performance</button>
+            <button className="bg-[#5a6087] text-gray-200 px-4 py-2 ml-8 rounded-full shadow-md text-lg hover:bg-gray-800 hover:border-red"
+              onClick={() => {
+                window.location.replace("/chat?option=efficiency");
+              }}
+            >Efficiency</button>
+        </div>     
+    </div>)}
+</>
   );
 }
