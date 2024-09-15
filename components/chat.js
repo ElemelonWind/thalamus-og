@@ -35,7 +35,8 @@ export default function Chat() {
         const n = text.trim().length;
       };
 
-    const [actions, setActions] = useState([]);
+    const [isEasyMode, setIsEasyMode] = useState(false);
+    const [models, setModels] = useState([]);
 
     const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
         loading: () => <LoadingIcon />,
@@ -116,10 +117,15 @@ export default function Chat() {
                     ];
                 });
               }
-              if (object["actions"]) {
-                setActions((prev) => {
-                  return [...prev, ...object["actions"]];
-                });
+              if (object["type"]) {
+                if (object["type"] === "easy") {
+                  setIsEasyMode(true);
+                } else if (object["type"] === "hard") {
+                  setIsEasyMode(false);
+                }
+              }
+              if (object["models"]) {
+                setModels(object["models"]);
               }
             }
           };

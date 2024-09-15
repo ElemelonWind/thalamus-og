@@ -41,7 +41,7 @@ def generate():
         message['data'] = agent_response
         
         # Stream both the user message and agent response
-        yield f"data: {json.dumps(user_message)}\n\n"
+        yield f"data: {json.dumps(message)}\n\n"
     yield 'data: END\n\n'
 
 class MyResponse(Resource):
