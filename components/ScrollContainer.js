@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useLayoutEffect } from "react";
 
 export default function ScrollContainer({children}) {
     const outerRef = useRef(null);
@@ -18,16 +18,21 @@ export default function ScrollContainer({children}) {
         left: 0
       });
     }, []);
+
+    useLayoutEffect(() => {
+      console.log(innerRef.current.clientHeight);
+    }, []);
   
     // scroll smoothly on change of children
     useEffect(() => {
       const outerHeight = outerRef.current.clientHeight;
-      const innerHeight = innerRef.current.clientHeight;
+      const innerHeight = innerRef.current.scrollHeight + innerRef.current.clientHeight + innerRef.current.offsetTop;
+      console.log(innerHeight, outerHeight);
       if (innerHeight === lastInnerHeight) return;
         setLastInnerHeight(innerHeight);
   
       outerRef.current.scrollTo({
-        top: innerHeight - outerHeight + 32,
+        top: innerHeight - outerHeight,
         left: 0,
       });
     }, [children]);
@@ -39,17 +44,22 @@ export default function ScrollContainer({children}) {
           position: "relative", 
           height: "100%", 
           overflowY: "auto",
-          overflowX: "hidden"
+          overflowX: "hidden",
          }}
       >
         <div
           ref={innerRef}
           style={{
-            position: "relative",
-            scrollBehavior: "smooth",
+            position: "absolute",
+            bottom: 0,
             paddingRight: "16px",
+            overflowY: "auto",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column-reverse"
           }}
         >
+          {/* children reversed */}
           {children}
         </div>
       </div>
