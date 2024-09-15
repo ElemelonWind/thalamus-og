@@ -73,50 +73,47 @@ export default function Chat() {
         console.log(messages)
       };
 
-    function sendMessage(message) {
-      console.log("Sending message: ", message);
+      function sendMessage(message) {
+        console.log("Sending message: ", message);
         setLoading(true);
-        let loadingMessage = ""
-        
-          const es = new EventSource("http://127.0.0.1:5000/response");
-          es.onmessage = (e) => {
-            console.log(e.data);
-            if (e.data == "Message 4") {
-              console.log("Closing connection");
-              es.close();
-              setLoading(false);
-            }
-
-            else {
-              loadingMessage += e.data;
-                setMessages((prev) => {
-                  if (prev.length > 0 && prev[prev.length - 1].role === "system") {
-                    return [
-                      ...prev.slice(0, prev.length - 1),
-                      {
-                        role: "system",
-                        content: loadingMessage,
-                        date: new Date(),
-                        streaming: true,
-                      },
-                    ];
-                  } else {
-                    return [
-                      ...prev,
-                      {
-                        role: "system",
-                        content: loadingMessage,
-                        date: new Date(),
-                        streaming: true,
-                      },
-                    ];
-                  }
-                });
-            }
-          };
-
-    }
-
+        let loadingMessage = "";
+      
+        const es = new EventSource("http://127.0.0.1:5000/response");
+        es.onmessage = (e) => {
+          console.log(e.data);
+          if (e.data === "Message 4") {  // Use strict equality
+            console.log("Closing connection");
+            es.close();
+            setLoading(false);
+          } else {
+            loadingMessage += e.data;
+            setMessages((prev) => {
+              if (prev.length > 0 && prev[prev.length - 1].role === "system") {
+                return [
+                  ...prev.slice(0, prev.length - 1),
+                  {
+                    role: "system",
+                    content: loadingMessage,
+                    date: new Date(),
+                    streaming: true,
+                  },
+                ];
+              } else {
+                return [
+                  ...prev,
+                  {
+                    role: "system",
+                    content: loadingMessage,
+                    date: new Date(),
+                    streaming: true,
+                  },
+                ];
+              }
+            });
+          }
+        };
+      }
+      
     return (
         <div className={`${styles["chat"]}`} 
         key={session.id}>
