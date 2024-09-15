@@ -13,7 +13,7 @@ import Card from "./card.js";
 import Visualization from "./visualization.js";
 export default function Chat() {
 
-    const DEFAULT_TOPIC = "New Conversation";
+    const DEFAULT_TOPIC = "Conversation";
 
     const [loading, setLoading] = useState(false);
 
@@ -35,8 +35,34 @@ export default function Chat() {
         const n = text.trim().length;
       };
 
+      const testEasy = [
+        {
+            type: "Model",
+            name: "GPT-3",
+            reasoning: "GPT-3 is a powerful language model that can generate human-like text."
+        }
+    ]
+
+    const testHard = [
+        {
+            type: "Model",
+            name: "GPT-3",
+            reasoning: "GPT-3 is a powerful language model that can generate human-like text."
+        },
+        {
+            type: "Tool",
+            name: "GPT-4",
+            reasoning: "GPT-4 is a powerful language model that can generate human-like text."
+        },
+        {
+            type: "Assistant",
+            name: "GPT-5",
+            reasoning: "GPT-5 is a powerful language model that can generate human-like text."
+        }
+    ]
+
     const [isEasyMode, setIsEasyMode] = useState(false);
-    const [models, setModels] = useState([]);
+    const [models, setModels] = useState(testHard);
 
     const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
         loading: () => <LoadingIcon />,
@@ -88,7 +114,7 @@ export default function Chat() {
 
     function sendMessage(message) {
       console.log("Sending message: ", message);
-        setActions([]);
+        setModels([]);
         let loadingMessage = ""
         
           const es = new EventSource("http://127.0.0.1:5000/response");
@@ -135,19 +161,23 @@ export default function Chat() {
     return (
       <div className="flex">
       <div className={`${styles["sidebar"]}`}>
-      <div className={`window-header-title ${styles["chat-body-title"]}`}>
-        <div className={`window-header-main-title ${styles["chat-body-main-title"]}`}>
-          Actions
-        </div>
+      <div className={`h-full`}>
+      <div className="window-header">
+            <div className={`window-header-title ${styles["chat-body-title"]}`}>
+              <div
+                className={`window-header-main-title ${styles["chat-body-main-title"]}`}
+              >
+                Agents
+              </div>
+              <div className="window-header-sub-title">
+                {session.id}
+              </div>
+            </div>
+          </div>
         {/* <ul className={`${styles["sidebar-list"]}`}> */}
           <Visualization 
-            arxiv="gpt-4o"
-            webSearch="gpt-4"
-            csvSearch="gpt-3.5-turbo"
-            writing="?"
-            math="?"
-            model="Mixtral"
-            reasoning="Task requires multiple iterations to refine the solution"
+            easy={isEasyMode}
+            models={models}
           />
           {/* {actions.map((action, i) => {
             return (
@@ -159,7 +189,7 @@ export default function Chat() {
         {/* </ul> */}
       </div>
       </div>
-        <div className={`grid grid-cols-subgrid col-span-2 w-2/3`} >
+        <div className={`grid grid-cols-subgrid col-span-2`} >
         <div className={`${styles["chat"]}`}
         key={session.id}>
           <div className="window-header">

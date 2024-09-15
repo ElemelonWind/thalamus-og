@@ -303,7 +303,6 @@
 }
 
 .sidebar {
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -311,7 +310,6 @@
     top: 0;
     height: 100vh;
     width: 50vw;
-    padding: 20px;
 }
 
 .chat-body {
