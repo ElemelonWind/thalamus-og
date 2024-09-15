@@ -45,7 +45,7 @@ if __name__ == '__main__':
     agent = VectorSearchAgent(engine)
 
     # Test run: Search for earthy and smooth scotch under $100
-    search_query = "earthy and smooth taste"
+    search_query = "earthy and smooth whisky"
     results = agent.vector_search(search_query)
     print(results[0][0])
     print(results[0][1])
