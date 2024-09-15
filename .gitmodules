@@ -1,0 +1,3 @@
+[submodule "backend/backend_api"]
+	path = backend/backend_api
+	url = https://github.com/ssiddhantsood/thalamus.git
