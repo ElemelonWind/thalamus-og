@@ -1,14 +1,21 @@
 from flask import Flask, Response
 from flask_restful import Resource, Api, reqparse
 import time
+import json
 
 app = Flask(__name__)
 api = Api(app)
 
+message = {
+    'data': 'more stuff',
+    'actions': ['action1', 'action2']
+}
+
 def generate():
         for i in range(5):
             time.sleep(1)  # Simulate processing
-            yield f"data: Message {i}\n\n"  # Send data as a chunk to the client
+            yield 'data: ' + json.dumps(message) + '\n\n'
+        yield 'data: END\n\n'
 
 class MyResponse(Resource):
     def get(self):

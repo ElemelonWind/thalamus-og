@@ -299,6 +299,19 @@
   flex-direction: column;
   position: relative;
   height: 100vh;
+  width: 50vw;
+}
+
+.sidebar {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 50vw;
+    padding: 20px;
 }
 
 .chat-body {
@@ -443,12 +456,12 @@
   margin-top: 10px;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.05);
-  padding: 10px;
-  font-size: 14px;
+  padding: 15px;
   user-select: text;
   word-break: break-word;
   position: relative;
   transition: all ease 0.3s;
+  margin-bottom: 2px;
 }
 
 .chat-message-item-image {
@@ -524,16 +537,24 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0 6px;
-
-  .chat-message-usage {
-    display: flex;
-  }
-
-  .tooltip {
-    width: 14px;
-    height: 14px;
-  }
 }
+
+.chat-message-action-date-bot {
+    font-size: 12px;
+    white-space: nowrap;
+    transition: all ease 0.6s;
+    color: var(--light-gray);
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 10px;
+    z-index: 1;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 6px;
+  }
 
 .chat-message-user>.chat-message-container>.chat-message-item {
   background-color: var(--second);

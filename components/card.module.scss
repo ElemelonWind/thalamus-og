@@ -1,0 +1,78 @@
+
+  
+  .panel {
+    height: 150px;
+    width: 150px;
+    position: relative;
+
+  }
+  .ring,
+  .card,
+  .border,
+  .slide,
+  .line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ring {
+    color: #fffbf1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 150px;
+  }
+  
+  .card {
+    background: var(--second);
+    position: relative;
+    transition: all 1s;
+    height: 150px;
+    width: 150px;
+    border-radius: 25%;
+  }
+  
+//   .card1 {
+//     background-image: url("https://assets.codepen.io/489403/brazil.jpg");
+//     background-repeat: no-repeat;
+//     background-size: 200% 120%;
+//   }
+  
+//   .card2 {
+//     background-image: url("https://assets.codepen.io/489403/belize.jpg");
+//     background-repeat: no-repeat;
+//     background-size: 100% 100%;
+//   }
+  
+//   .card3 {
+//     background-image: url("https://assets.codepen.io/489403/egypt.jpg");
+//     background-repeat: no-repeat;
+//     background-size: 140% 100%;
+//   }
+  
+
+  
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 1s;
+    top: 0;
+    color: rgb(90, 96, 135);
+    text-align: center;
+  }
+  
+  
+  .border {
+    position: absolute;
+    // border: 1px solid rgba(255, 255, 255, 0.5);
+    height: 150px;
+    width: 150px;
+    transition: border 1s;
+    overflow: hidden;
+  }
+  
+  .fa-plane {
+    font-size: 16px;
+  }

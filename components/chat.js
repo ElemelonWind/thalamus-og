@@ -8,7 +8,9 @@ import StopIcon from "../icons/pause.js";
 import dynamic from "next/dynamic";
 import styles from "./chat.module.scss";
 import ScrollContainer from "./ScrollContainer.js";
-
+import Model from "./model.js";
+import Card from "./card.js";
+import Visualization from "./visualization.js";
 export default function Chat() {
 
     const DEFAULT_TOPIC = "New Conversation";
@@ -32,6 +34,8 @@ export default function Chat() {
         setUserInput(text);
         const n = text.trim().length;
       };
+
+    const [actions, setActions] = useState([]);
 
     const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
         loading: () => <LoadingIcon />,
@@ -57,6 +61,7 @@ export default function Chat() {
       const onSubmit = (userInput) => {
         if (userInput.trim() === "") return;    
         if (loading) return;
+        setLoading(true);
 
         setMessages([
             ...messages,
@@ -64,7 +69,14 @@ export default function Chat() {
                 role: "user",
                 content: userInput,
                 date: new Date(),
+                streaming: false,
             },
+            {
+                role: "system",
+                content: "",
+                date: new Date(),
+                streaming: true,
+            }
         ])
 
         sendMessage(userInput);
@@ -75,50 +87,74 @@ export default function Chat() {
 
     function sendMessage(message) {
       console.log("Sending message: ", message);
-        setLoading(true);
+        setActions([]);
         let loadingMessage = ""
         
           const es = new EventSource("http://127.0.0.1:5000/response");
           es.onmessage = (e) => {
             console.log(e.data);
-            if (e.data == "Message 4") {
+            
+            if (e.data == "END") {
               console.log("Closing connection");
               es.close();
               setLoading(false);
             }
 
             else {
-              loadingMessage += e.data;
+              const object = JSON.parse(e.data);
+              if (object["data"]) {
+                loadingMessage += object["data"];
                 setMessages((prev) => {
-                  if (prev.length > 0 && prev[prev.length - 1].role === "system") {
-                    return [
+                  return [
                       ...prev.slice(0, prev.length - 1),
                       {
                         role: "system",
                         content: loadingMessage,
                         date: new Date(),
-                        streaming: true,
+                        streaming: false,
                       },
                     ];
-                  } else {
-                    return [
-                      ...prev,
-                      {
-                        role: "system",
-                        content: loadingMessage,
-                        date: new Date(),
-                        streaming: true,
-                      },
-                    ];
-                  }
                 });
+              }
+              if (object["actions"]) {
+                setActions((prev) => {
+                  return [...prev, ...object["actions"]];
+                });
+              }
             }
           };
 
     }
 
     return (
-        <div className={`${styles["chat"]}`} 
+      <div className="flex">
+      <div className={`${styles["sidebar"]}`}>
+      <div className={`window-header-title ${styles["chat-body-title"]}`}>
+        <div className={`window-header-main-title ${styles["chat-body-main-title"]}`}>
+          Actions
+        </div>
+        {/* <ul className={`${styles["sidebar-list"]}`}> */}
+          <Visualization 
+            arxiv="gpt-4o"
+            webSearch="gpt-4"
+            csvSearch="gpt-3.5-turbo"
+            writing="?"
+            math="?"
+            model="Mixtral"
+            reasoning="Task requires multiple iterations to refine the solution"
+          />
+          {/* {actions.map((action, i) => {
+            return (
+              <li key={i}>
+                {action}
+              </li>
+            );
+          })} */}
+        {/* </ul> */}
+      </div>
+      </div>
+        <div className={`grid grid-cols-subgrid col-span-2 w-2/3`} >
+        <div className={`${styles["chat"]}`}
         key={session.id}>
           <div className="window-header">
             <div className={`window-header-title ${styles["chat-body-title"]}`}>
@@ -149,44 +185,23 @@ export default function Chat() {
                   >
                     <div className={styles["chat-message-container"]}>
                       <div className={styles["chat-message-item"]}>
-                        {message.role === "system" && (
-                            <Markdown
+                      <Markdown
                             content={message.content}
-                            loading={
-                              (message.preview || message.streaming) &&
-                              message.content.length === 0 &&
-                              !isUser
-                            }
-                            fontSize={16}
+                            loading={message.streaming}
                           />
-                        )}
-                        {message.role === "user" && (
-                            <div
-                              fontSize={16}
-                            >
-                                {message.content}
-                            </div>
-                        )}
                       </div>
-                      <div className={styles["chat-message-action-date"]}>
-                        {message.role === "assistant" && message.usage && (
-                          <>
-                            <div>
-                              {`Prefill: ${message.usage.extra.prefill_tokens_per_s.toFixed(
-                                1,
-                              )} tok/s,`}
-                            </div>
-                            <div>
-                              {`Decode: ${message.usage.extra.decode_tokens_per_s.toFixed(
-                                1,
-                              )} tok/s,`}
-                            </div>
-                          </>
-                        )}
-                        <div>
+                      {
+                        message.role === "user" && (
+                          <div className={styles["chat-message-action-date"]}>
+                        {message.date.toLocaleString()}
+                      </div>
+                        )
+                      }
+                      {message.role === "system" && (
+                        <div className={styles["chat-message-action-date-bot"]}>
                           {message.date.toLocaleString()}
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </Fragment>
@@ -223,6 +238,8 @@ export default function Chat() {
                 />
             </label>
           </div>
+        </div>
+        </div>
         </div>
       );
 }

@@ -1,5 +1,8 @@
 @import "./animation.scss";
 @import "./window.scss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @font-face {
   font-family: OratorStd;
@@ -39,7 +42,6 @@
 
   --window-width: 90vw;
   --window-height: 90vh;
-  --sidebar-width: 450px;
   --window-content-width: calc(100% - var(--sidebar-width));
   --message-max-width: 80%;
   --full-height: 100%;
