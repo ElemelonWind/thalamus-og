@@ -71,8 +71,6 @@ The carbon footprint was loosely modeled via the approach from this paper: https
 
 These results demonstrate that Thalamus significantly reduces costs and environmental impact while maintaining, and in some cases even enhancing, performance.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## User Experience and Visualization
 
 Thalamus is seamlessly integrated into standard LLM chatbot interfaces, providing users with an intuitive experience. 
@@ -84,3 +82,5 @@ Additionally, it offers:
 ## Conclusion
 
 Thalamus presents an LLM layer that allows companies to save millions while simultaneously saving environmental sustainability. By intelligently directing queries to the most appropriate model and leveraging lightweight architectures, Thalamus ensures efficient and effective language processing suitable for a wide range of applications.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
