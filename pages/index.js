@@ -25,8 +25,8 @@ export default function Home() {
         <div class="self-center items-center flex flex-col sm:flex-row w-full md:w-5/6 px-4 sm:px-0">
             <div class="w-full text-center sm:text-left sm:w-1/3 py-12 sm:px-8">
                 <h1 class="tracking-wide text-[#5a6087] text-2xl mb-6 font-bold">introducing</h1>
-                <h2 class="font-bold tracking-widest text-4xl">THALAMUS</h2>
-                <span class={`${styles["content__container"]} block font-light text-browngray text-2xl my-6`}>
+                <h2 class="font-bold tracking-widest text-4xl mb-6">THALAMUS</h2>
+                {/* <span class={`${styles["content__container"]} block font-light text-browngray text-2xl my-6`}>
                     <ul class={`${styles["content__container__list"]}`}>
                         <li class={`${styles["content__container__list__item"]}`}>Mixtral</li>
                         <li class={`${styles["content__container__list__item"]}`}>Dolphin</li>
@@ -36,8 +36,9 @@ export default function Home() {
                         <li class={`${styles["content__container__list__item"]}`}>Gemini 1.5 Pro</li>
                         <li class={`${styles["content__container__list__item"]}`}>Custom Agents</li>
                     </ul>
-                </span>
-                <p class="font-bold tracking-widest text-4xl">harnessed by one router</p>
+                </span> */}
+                <p class="tracking-widest text-4xl">The Brain Behind Sustainable AI
+                </p>
             </div>
             <div class="w-full sm:w-2/3">
                 <FriendsIcon />
