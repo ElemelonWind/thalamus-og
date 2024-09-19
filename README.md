@@ -26,6 +26,9 @@
 <!-- ABOUT THE PROJECT -->
 ## Introduction
 
+Video Demo: https://youtu.be/mjJ8PK2FnFQ
+Live App: https://thalamus-og-live.vercel.app/
+
 The deployment of large language models (LLMs) has significantly advanced natural language processing applications. However, the high computational costs associated with running these models—both economically and environmentally—pose substantial challenges. Specifically:
 
 * **Environmental Impact**: Millions of tons of CO₂ are emitted due to the energy-intensive inference processes of powerful LLMs.
